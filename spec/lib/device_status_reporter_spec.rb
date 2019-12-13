@@ -10,4 +10,11 @@ RSpec.describe DeviceStatusReporter do
       expect(DeviceStatusReporter.all.count).to eq 2
     end
   end
+  describe ".single" do
+    it "returns current status for a single device" do
+      device = DeviceStatusReporter.single(Device.first.id)
+      expect(device).to eq Device.first
+    end
+  end
+
 end
