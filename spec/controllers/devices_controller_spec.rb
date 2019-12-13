@@ -32,10 +32,6 @@ RSpec.describe DevicesController, type: :controller do
     {name: "tv", status: "on", current_consumption: "20w", location: "livingroom"}
   }
 
-  let(:invalid_attributes) {
-    skip("Add a hash of attributes invalid for your model")
-  }
-
   describe "GET #index" do
     it "returns a success response" do
       device = Device.create! valid_attributes
@@ -52,7 +48,6 @@ RSpec.describe DevicesController, type: :controller do
     end
   end
 
-
   describe "PUT #update" do
     context "with valid device id" do
       it "updates the requested device status" do
@@ -64,18 +59,16 @@ RSpec.describe DevicesController, type: :controller do
 
       it "renders a JSON response with the device" do
         device = Device.create! valid_attributes
-
         put :update, params: {id: device.to_param}
         expect(response).to have_http_status(:ok)
         expect(response.content_type).to eq('application/json')
       end
     end
 
-    context "with invalid params" do
+    context "with invalid device id" do
       it "renders a JSON response with errors for the device" do
-        device = Device.create! valid_attributes
-
-        put :update, params: {id: device.to_param, device: invalid_attributes}, session: valid_session
+        #device = Device.create! invalid_attributes
+        put :update, params: {id: 4}
         expect(response).to have_http_status(:unprocessable_entity)
         expect(response.content_type).to eq('application/json')
       end

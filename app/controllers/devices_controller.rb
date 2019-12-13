@@ -1,6 +1,10 @@
 class DevicesController < ApplicationController
   before_action :set_device, only: [:update]
 
+rescue_from ActiveRecord::RecordNotFound do |e|
+  render json: e.message, status: :unprocessable_entity
+end
+
   # GET /devices
   def index
     @devices = DeviceStatusReporter.all
@@ -16,11 +20,7 @@ class DevicesController < ApplicationController
   # PATCH/PUT /devices/1
   def update
     @device = DeviceToggler.toggle_device(params[:id])
-    if @device.valid?
-      render json: @device
-    else
-      render json: @device.errors, status: :unprocessable_entity
-    end
+    render json: @device 
   end
 
 
