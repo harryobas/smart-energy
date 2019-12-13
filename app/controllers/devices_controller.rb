@@ -1,42 +1,28 @@
 class DevicesController < ApplicationController
-  before_action :set_device, only: [:show, :update, :destroy]
+  before_action :set_device, only: [:update]
 
   # GET /devices
   def index
-    @devices = Device.all
-
+    @devices = DeviceStatusReporter.all
     render json: @devices
   end
 
   # GET /devices/1
   def show
+    @device = DeviceStatusReporter.single(params[:id])
     render json: @device
-  end
-
-  # POST /devices
-  def create
-    @device = Device.new(device_params)
-
-    if @device.save
-      render json: @device, status: :created, location: @device
-    else
-      render json: @device.errors, status: :unprocessable_entity
-    end
   end
 
   # PATCH/PUT /devices/1
   def update
-    if @device.update(device_params)
+    @device = DeviceToggler.toggle_device(params[:id])
+    if @device.valid?
       render json: @device
     else
       render json: @device.errors, status: :unprocessable_entity
     end
   end
 
-  # DELETE /devices/1
-  def destroy
-    @device.destroy
-  end
 
   private
     # Use callbacks to share common setup or constraints between actions.
@@ -46,6 +32,6 @@ class DevicesController < ApplicationController
 
     # Only allow a trusted parameter "white list" through.
     def device_params
-      params.require(:device).permit(:name, :status, :current_consumption, :location)
+      params.require(:device).permit(:status)
     end
 end
