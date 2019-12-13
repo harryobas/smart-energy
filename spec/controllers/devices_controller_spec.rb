@@ -54,22 +54,18 @@ RSpec.describe DevicesController, type: :controller do
 
 
   describe "PUT #update" do
-    context "with valid params" do
-      let(:new_attributes) {
-        skip("Add a hash of attributes valid for your model")
-      }
-
-      it "updates the requested device" do
+    context "with valid device id" do
+      it "updates the requested device status" do
         device = Device.create! valid_attributes
-        put :update, params: {id: device.to_param, device: new_attributes}, session: valid_session
-        device.reload
-        skip("Add assertions for updated state")
+        put :update, params: {id: device.to_param}
+        parsed_response = JSON.parse(response.body)
+        expect(parsed_response['status']).to eq "off"
       end
 
       it "renders a JSON response with the device" do
         device = Device.create! valid_attributes
 
-        put :update, params: {id: device.to_param, device: valid_attributes}, session: valid_session
+        put :update, params: {id: device.to_param}
         expect(response).to have_http_status(:ok)
         expect(response.content_type).to eq('application/json')
       end
