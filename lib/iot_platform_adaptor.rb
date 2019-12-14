@@ -1,4 +1,5 @@
 class IOTPlatformAdaptor
+
   def self.control_device(device)
     case device.status
     when "on"
