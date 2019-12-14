@@ -7,20 +7,20 @@ end
 
   # GET /devices
   def index
-    @devices = DeviceStatusReporter.all
+    @devices = DeviceManager.all_devices
     render json: @devices
   end
 
   # GET /devices/1
   def show
-    @device = DeviceStatusReporter.single(params[:id])
+    @device = DeviceManager.single_device(params[:id])
     render json: @device
   end
 
   # PATCH/PUT /devices/1
   def update
-    @device = DeviceToggler.toggle_device(params[:id])
-    render json: @device 
+    @device = DeviceManager.toggle_device(@device)
+    render json: @device
   end
 
 
@@ -30,8 +30,4 @@ end
       @device = Device.find(params[:id])
     end
 
-    # Only allow a trusted parameter "white list" through.
-    def device_params
-      params.require(:device).permit(:status)
-    end
 end
