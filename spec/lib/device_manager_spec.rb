@@ -14,14 +14,14 @@ RSpec.describe DeviceManager do
   end
 
   describe ".all_devices" do
-    it "returns current status of all monitored devices" do
+    it "returns all monitored devices" do
       IOTPlatformAdaptor.expects(:get_status_of_all_devices).returns(devices)
       DeviceManager.all_devices
     end
   end
 
   describe ".single_device" do
-    it "rethrns current status of a device" do
+    it "rethrns a single device" do
       IOTPlatformAdaptor.expects(:get_status_of_single_device).with(device_one.id).returns(device_one)
       DeviceManager.single_device(device_one.id)
     end
