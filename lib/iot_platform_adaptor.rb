@@ -11,8 +11,9 @@ class IOTPlatformAdaptor
         device.current_consumption = "0w"
       end
       device.save
-      return device  
+      return device
     end
+    nil
   end
 
   def self.all_devices
@@ -22,6 +23,7 @@ class IOTPlatformAdaptor
   def self.single_device(location, name)
     device = Device.find_by!(name: name)
     return device if device && device.location == location
+    nil
   end
 
 end

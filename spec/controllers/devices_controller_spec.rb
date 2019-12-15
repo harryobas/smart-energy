@@ -20,6 +20,24 @@ RSpec.describe DevicesController, type: :controller do
       get :show, params: {location: device.location, name: device.name}
       expect(response).to be_successful
     end
+    it "renders a JSON response with the device" do
+      device = Device.create! valid_attributes
+      get :show, params: {location: device.location, name: device.name}
+      expect(response.content_type).to eq('application/json')
+    end
+    it "renders a JSON response with errors for the device when device name is invalid" do
+      device = Device.create! valid_attributes
+      get :show, params: {location: device.location, name: "bingo"}
+      expect(response).to have_http_status(:unprocessable_entity)
+      expect(response.content_type).to eq('application/json')
+    end
+    it "renders a JSON response with errors for the device when device name is invalid" do
+      device = Device.create! valid_attributes
+      get :show, params: {location: "toilet", name: device.name}
+      expect(response).to have_http_status(:unprocessable_entity)
+      expect(response.content_type).to eq('application/json')
+    end
+
   end
 
   describe "PATCH #update" do
@@ -47,8 +65,16 @@ RSpec.describe DevicesController, type: :controller do
         expect(response.content_type).to eq('application/json')
       end
     end
+
+    context "with invalid device location" do
+      it "renders a JSON response with errors for the device" do
+        device = Device.create! valid_attributes
+        patch :update, params: {location: "toilet", name: device.name}
+        expect(response).to have_http_status(:unprocessable_entity)
+        expect(response.content_type).to eq('application/json')
+      end
+    end
+
   end
-
-
 
 end
