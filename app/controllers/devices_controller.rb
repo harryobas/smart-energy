@@ -2,7 +2,7 @@ class DevicesController < ApplicationController
 
 
 rescue_from ActiveRecord::RecordNotFound do |e|
-  render json: e.message, status: :unprocessable_entity
+  render json: {error: e.message}, status: :unprocessable_entity
 end
 
   def index
@@ -13,17 +13,17 @@ end
   def show
     @device = IOTPlatformAdaptor.single_device(params[:location], params[:name])
     if @device
-      render json: @device
+      return render json: @device
     end
-    render json: "unknown device", status: :unprocessable_entity
+    render json: {error: "unknown device"}, status: :unprocessable_entity
   end
 
   def update
     @device = IOTPlatformAdaptor.toggle_device(params[:location], params[:name])
     if @device
-      render json: @device
+      return render json: @device
     end
-    render json: "unknown device", status: :unprocessable_entity
+    render json: {error: "unknown device"}, status: :unprocessable_entity
   end
 
 
